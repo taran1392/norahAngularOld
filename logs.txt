@@ -1,0 +1,24 @@
+ubuntu@ip-172-31-29-245:~$ node Desktop/Ashish/norahBioNode/index.js
+got a connection
+Got port:4002
+testing console log
+executing run.py
+commandpython2 /home/ubuntu/Desktop/Ashish/norahBioNode/uploads/1501654066058/ru                                                                                        n.py
+failed to run run.py
+Error: Command failed: python2 /home/ubuntu/Desktop/Ashish/norahBioNode/uploads/1501654066058/run.py
+Traceback (most recent call last):
+  File "/home/ubuntu/Desktop/Ashish/norahBioNode/uploads/1501654066058/run.py", line 16, in <module>
+    rinput = requests.post("http://localhost:4002/render", files=files, data=params, stream=True)
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 88, in post
+    return request('post', url, data=data, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='localhost', port=4002): Max retries exceeded with url: /render (Caused by <class 'socket.error'>: [Errno 111] Connection refused)
+
+

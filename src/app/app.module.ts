@@ -16,6 +16,11 @@ import { RepositoryService } from './pages/repository/repository.service';
 import { RepositoryModule } from './pages/repository/repository.module';
 import { CharMakerComponent } from './pages/char-maker/char-maker.component';
 import { LogoComponent } from './pages/logo/logo.component';
+import {SocketIoModule,SocketIoConfig } from 'ng2-socket-io';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -32,10 +37,10 @@ import { LogoComponent } from './pages/logo/logo.component';
     AppRoutingModule,
     AuthModule,
     HomeModule,
-    RepositoryModule
-
+    RepositoryModule,
+    SocketIoModule
   ],
-  providers: [{ provide: GlobalRef, useClass: BrowserGlobalRef }, AuthGuard, DialogService, RepositoryService],
+  providers: [{ provide: GlobalRef, useClass: BrowserGlobalRef },  AuthGuard, DialogService, RepositoryService],
 
   bootstrap: [AppComponent]
 })
