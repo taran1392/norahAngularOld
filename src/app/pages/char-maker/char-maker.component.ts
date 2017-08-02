@@ -40,6 +40,9 @@ export class CharMakerComponent implements OnInit {
   public outputSex:any;
   public inputUrl = "assets/data/input.json";
   public OutputUrl = "assets/data/output.json";
+  private FileUploadId:any;
+  private processedFiles=[];
+  private selectedImage:any;
   constructor(
     private _http: Http,
     private sanitizer: DomSanitizer,
@@ -126,10 +129,16 @@ showMessag(msg:string){
 
         console.log("Socket Data Received: ");
         console.log(data);
-        
-      //  this.toaster.pop('success',"Char maker ","Files successfully processed "+data.files);
-    this.showMessag("Files successfully processed "+data.files);  
-    });
+      if(data.id==this.FileUploadId){    
+       this.showMessag("Files successfully processed ");
+       this.processedFiles=data.files;
+       
+      //files received
+      //load them in the component
+      
+      }
+    
+      });
       
 
       this.socket.on('error',(data)=>{
@@ -137,9 +146,8 @@ showMessag(msg:string){
 
         console.log("Socket Data Received: ");
         console.log(data);
-
-       // this.toaster.pop('error',"Char maker ",data.msg);
-      this.showMessag(data.msg);
+        if(data.id==this.FileUploadId)
+          this.showMessag(data.msg);
       });
 
 
@@ -184,6 +192,22 @@ showMessag(msg:string){
 //                 console.log(err);
 //             })
 //      }
+
+
+
+imageSelected(index:number){
+  try{
+      this.selectedImage=this.processedFiles[index];
+      
+
+  }catch(ex){
+
+
+  }
+
+
+
+}
 
   saveBaseParamRange(slider,value) {
     console.log('Value of slider ' + slider + ' changed to', value);
@@ -236,7 +260,8 @@ this.outputRes = {
                     console.log(d);    
                     
                // this.toaster.pop('success',"Char maker ","Files successfully uploaded  ID:"+d.id );
-                  this.showMessag("Files successfully uploaded  ID:"+d.id );
+               this.FileUploadId=d.id;  
+               this.showMessag("Files successfully uploaded  ID:"+d.id );
               } else {
                   console.log("fAILED");
                   this.showMessag("Failed to upload Files");
@@ -247,7 +272,7 @@ this.outputRes = {
         }
   request.open(
               "POST",
-              "http://52.220.13.217:8080/upload"  //replace with the target server which is handling uploads
+              "http://localhost:8080/upload"  //replace with the target server which is handling uploads
               //"http://130.211.167.206:2000/upload"
              // "http://192.168.1.114:3000/users/abc"
     ,true

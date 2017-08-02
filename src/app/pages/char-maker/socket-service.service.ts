@@ -4,7 +4,7 @@ import {Socket} from 'ng2-socket-io';
 export class SocketService extends Socket {
 
   constructor() { 
-    super({url:"http://52.220.13.217:8080",options:{}})
+    super({url:"http://localhost:8080",options:{}})
 
     
   }
