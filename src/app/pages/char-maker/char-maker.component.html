@@ -113,38 +113,29 @@
          <div id="content-wrapper">
             <div class="object-container">
                <div class="object-container-in">
-                  <div class="object-container-l">
-                     <div class="block" (click)="imageSelected(0)" >
-                       <img *ngIf="processedFiles"  [src]="{processedFiles[0].file}"/>
-                     </div>
-                     <div class="block" (click)="imageSelected(1)">
-                    <img *ngIf="processedFiles" [src]="{processedFiles[1].file}"/>
-                     </div>
-                     <div class="block" (click)="imageSelected(2)">
-                      <img *ngIf="processedFiles" [src]="{processedFiles[2].file}"/>
-                    </div>
-                     <div class="block" (click)="imageSelected(3)">
-                       <img *ngIf="processedFiles" [src]="{processedFiles[3].file}"/>
-                    </div>
+                  <div class="object-container-l" *ngIf="processedFiles.length>0">
+                     <div  *ngFor="let p of processedFiles"  class="block" (click)="imageSelected(0)" >
+                       <img *ngIf="processedFiles"  src={{processedFiles[0].file}}/>
+                    
                   </div>
                   <div class="object-img-container object-fix">
                      <div class="block block-object">
                         <span class="helper"></span>
-                        <img src="{selectedImage?selectedImage.file:'assets/images/object-2.png'}" alt="">
+                        <img src={{selectedImage!=null?selectedImage.file:'assets/images/object-2.png'}} alt="">
                      </div>
                   </div>
                   <div class="object-container-l">
                   <div class="block" (click)="imageSelected(4)" >
-                       <img *ngIf="processedFiles"  [src]="{processedFiles[4].file}"/>
+                       <img *ngIf="processedFiles"  src={{processedFiles[4].file}}/>
                      </div>
                      <div class="block" (click)="imageSelected(5)">
-                    <img *ngIf="processedFiles" [src]="{processedFiles[5].file}"/>
+                    <img *ngIf="processedFiles" src={{processedFiles[5].file}/>
                      </div>
                      <div class="block" (click)="imageSelected(6)">
-                      <img *ngIf="processedFiles" [src]="{processedFiles[6].file}"/>
+                      <img *ngIf="processedFiles" src={{processedFiles[6].file}}/>
                     </div>
                      <div class="block" (click)="imageSelected(7)">
-                       <img *ngIf="processedFiles" [src]="{processedFiles[7].file}"/>
+                       <img *ngIf="processedFiles" src={{processedFiles[7].file}}/>
                     </div>  
                   </div>
                </div>

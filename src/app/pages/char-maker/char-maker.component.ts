@@ -272,7 +272,7 @@ this.outputRes = {
         }
   request.open(
               "POST",
-              "http://localhost:8080/upload"  //replace with the target server which is handling uploads
+              "http://54.254.224.168:8080/upload"  //replace with the target server which is handling uploads
               //"http://130.211.167.206:2000/upload"
              // "http://192.168.1.114:3000/users/abc"
     ,true
