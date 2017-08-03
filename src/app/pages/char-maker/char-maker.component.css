@@ -1,0 +1,24 @@
+.block_img{
+
+    width:60px;
+    height:100px;
+
+}
+
+
+.btn-panel_btn{
+
+    margin-right: 20px;
+
+}
+.btn-panel{
+
+    padding: 5px;
+    text-align:right;
+}
+
+.block.active{
+
+    border:1px solid white;
+
+}

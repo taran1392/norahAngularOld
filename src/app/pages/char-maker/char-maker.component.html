@@ -90,7 +90,28 @@
                         </a>
                         <div class="detail b-none" style="display: none;">
                            <div class="Parameters_object">
-                              <img src="assets/images/object-1.jpg" alt="">
+                              <img src={{bodyPartImage}} style="width:202px;height:292px" alt="" usemap="#Bodymap">
+
+                              <map name="Bodymap">
+
+
+<area alt="" title="left leg" (click)='bodyPartTypeSelected("leg")' shape="poly" coords="75,123,100,147,87,258,74,258" />
+    <area alt="" title="right leg" (click)='bodyPartTypeSelected("leg")' shape="poly" coords="123,121,108,148,115,256,130,257" />
+    <area alt="" title="left foot" (click)='bodyPartTypeSelected("foot")' shape="rect" coords="68,260,88,280" />
+    <area alt="" title="right foot" (click)='bodyPartTypeSelected("foot")' shape="rect" coords="112,259,138,281" />
+	
+	 <area alt="" title="left hand" (click)='bodyPartTypeSelected("hand")'shape="rect" coords="9,118,33,152" />
+    <area alt="" title="right hand" (click)='bodyPartTypeSelected("hand")' shape="rect" coords="164,124,199,147" />
+    <area alt="" title="left arm" (click)='bodyPartTypeSelected("arm")' shape="poly" coords="67,49,83,63,36,120,23,115" />
+    <area alt="" title="right arm" (click)='bodyPartTypeSelected("arm")' shape="poly" coords="126,48,119,63,164,118,179,114" />
+    <area alt="" title="neck" (click)='bodyPartTypeSelected("neck")' shape="rect" coords="94,36,112,45" />
+    <area alt="" title="head" (click)='bodyPartTypeSelected("head")' shape="rect" coords="84,8,120,23" />
+   
+ <area alt="" title="breast" (click)='bodyPartTypeSelected("breast")' shape="poly" coords="80,51,122,49,128,84,76,86" />
+    <area alt="" title="torso" (click)='bodyPartTypeSelected("torso")' shape="poly" coords="79,92,127,93,128,119,103,136,77,118" />
+      
+</map>
+
                               <div class="upload">
                               <a href="#"><img src="assets/images/recycling.png" alt=""></a>
                               <div style="display: none">
@@ -114,28 +135,36 @@
             <div class="object-container">
                <div class="object-container-in">
                   <div class="object-container-l" *ngIf="processedFiles.length>0">
-                     <div  *ngFor="let p of processedFiles"  class="block" (click)="imageSelected(0)" >
-                       <img *ngIf="processedFiles"  src={{processedFiles[0].file}}/>
-                    
-                  </div>
+                <div class="block" (click)="imageSelected(0)" >
+                      <img *ngIf="processedFiles" class="block_img" src={{processedFiles[0].file}}/>
+                     </div>
+                     <div class="block" (click)="imageSelected(0)">
+                    <img *ngIf="processedFiles"  class="block_img" src={{processedFiles[1].file}}/>
+                     </div>
+                     <div class="block" (click)="imageSelected(2)">
+                      <img *ngIf="processedFiles" class="block_img" src={{processedFiles[2].file}}/>
+                    </div>
+                     <div class="block" (click)="imageSelected(3)">
+                       <img *ngIf="processedFiles"  class="block_img" src={{processedFiles[3].file}}/>
+                    </div>  
+                </div>
                   <div class="object-img-container object-fix">
-                     <div class="block block-object">
-                        <span class="helper"></span>
-                        <img src={{selectedImage!=null?selectedImage.file:'assets/images/object-2.png'}} alt="">
+                     <div class="block block-object" *ngIf ="selectedImage">
+                        <img src={{selectedImage.file}} >
                      </div>
                   </div>
-                  <div class="object-container-l">
-                  <div class="block" (click)="imageSelected(4)" >
-                       <img *ngIf="processedFiles"  src={{processedFiles[4].file}}/>
+                  <div class="object-container-l" *ngIf="processedFiles.length>0">
+                  <div class="block" (click)="imageSelected(4)"  >
+                      <img *ngIf="processedFiles" class="block_img" src={{processedFiles[4].file}}/>
                      </div>
                      <div class="block" (click)="imageSelected(5)">
-                    <img *ngIf="processedFiles" src={{processedFiles[5].file}/>
+                    <img *ngIf="processedFiles"  class="block_img" src={{processedFiles[5].file}}/>
                      </div>
                      <div class="block" (click)="imageSelected(6)">
-                      <img *ngIf="processedFiles" src={{processedFiles[6].file}}/>
+                      <img *ngIf="processedFiles" class="block_img" src={{processedFiles[6].file}}/>
                     </div>
                      <div class="block" (click)="imageSelected(7)">
-                       <img *ngIf="processedFiles" src={{processedFiles[7].file}}/>
+                       <img *ngIf="processedFiles"  class="block_img" src={{processedFiles[7].file}}/>
                     </div>  
                   </div>
                </div>
@@ -144,41 +173,21 @@
          <!--Container-->         
          <!--Right Sidebar-->
          <div id="RSidebar">
-            <h1>Eyes</h1>
-            <div class="rsidebar-block">
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
+           <div class="btn-panel" >
+                  <button class="btn btn-primary btn-panel_btn" [disabled]="!changeHistory.length>0" (click)="undo()" >Undo</button>  
+                
+                  <button class="btn btn-primary btn-panel_btn " (click)="merge()"> Merge</button></div> 
+           
+          <h1>{{bodyParts.part}}</h1>
+            <div class="rsidebar-block" *ngFor="let bodyPart of bodyParts.files;let i=index"  >
+                    <div class="rangeSlider_block" (click)="bodyPartSelected(i)" >
+                  <div [class]="selectedBodyPart&&selectedBodyPart.file==bodyPart.file?'block active':'block'">
+
+                    <img src={{bodyPart.file}} class="block_img">
+                  </div>
                  <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
                </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                 <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                 <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                  <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                   <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                    <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                    <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-               <div class="rangeSlider_block">
-                  <div class="block"></div>
-                    <!--  <nouislider [min]="0" [max]="15" [step]="0.05" [(ngModel)]="someValue" (change)="saveRange($event)" [disabled]="disabled"></nouislider> -->
-               </div>
-            </div>
+             </div>
          </div>
          <!--Right Sidebar-->
 </div>

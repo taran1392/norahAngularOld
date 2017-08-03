@@ -42,7 +42,11 @@ export class CharMakerComponent implements OnInit {
   public OutputUrl = "assets/data/output.json";
   private FileUploadId:any;
   private processedFiles=[];
-  private selectedImage:any;
+  private selectedImage:any={file:"assets/images/object2-png"};
+  private bodyParts:any=[];
+  private selectedBodyPart:any;
+  private changeHistory:any=[];
+  private bodyPartImage:any="assets/images/human/human.png"
   constructor(
     private _http: Http,
     private sanitizer: DomSanitizer,
@@ -105,6 +109,83 @@ showMessag(msg:string){
     
 
 }
+  undo(){
+      //undo last changes
+
+      if(this.changeHistory.length >0)
+        { this.processedFiles=this.changeHistory.pop();
+          this.selectedImage=this.processedFiles[0];
+
+        }
+  }
+
+
+  merge(){
+
+    //input.json from selected Image
+    
+    let inputVal= Object.assign({},this.selectedImage);
+
+    for(var attr in this.selectedBodyPart){
+
+      inputVal[attr]=0;
+    }
+
+
+    let outputVal=Object.assign({},this.selectedImage,this.selectedBodyPart);
+
+    delete outputVal.file;
+    delete inputVal.file;
+    
+    console.log(inputVal);
+    console.log(outputVal);
+    const inputjson = JSON.stringify(inputVal);
+  const outputjson = JSON.stringify(outputVal);
+  
+ 
+    var blobinput = new Blob([inputjson], {type: "application/json"});
+  var bloboutput = new Blob([outputjson], {type: "application/json"});
+  
+  let form: FormData = new FormData();
+  form.append("input",blobinput, "input.json");
+  form.append("output",bloboutput, "output.json");
+  //let headers = new Headers({ 'Content-Type': 'application/json' });
+  let headers=new Headers({enctype:'multipart/form-data'});
+  var request = new XMLHttpRequest();
+
+  request.onreadystatechange = ()=> {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                  console.log("sUCCESS");
+                  var d=JSON.parse(request.response);
+                    console.log(d);    
+                    
+               // this.toaster.pop('success',"Char maker ","Files successfully uploaded  ID:"+d.id );
+               this.FileUploadId=d.id;  
+               this.showMessag("Files successfully uploaded  ID:"+d.id );
+              } else {
+                  console.log("fAILED");
+                  this.showMessag("Failed to upload Files");
+        //this.toaster.pop('error',"Char maker ","Failed to upload Files");
+                    console.log(request.response);
+                }
+            }
+        }
+  request.open(
+              "POST",
+              "http://localhost:8080/upload"  //replace with the target server which is handling uploads
+              //"http://130.211.167.206:2000/upload"
+             // "http://192.168.1.114:3000/users/abc"
+    ,true
+            );
+    
+  request.send(form);
+
+      
+
+
+  }
+
   ngOnInit() {
   	  $(function() {
             setTimeout(function(){
@@ -131,7 +212,11 @@ showMessag(msg:string){
         console.log(data);
       if(data.id==this.FileUploadId){    
        this.showMessag("Files successfully processed ");
+        if(this.processedFiles.length>0)
+       this.changeHistory.push(this.processedFiles);
        this.processedFiles=data.files;
+       this.selectedImage=data.files[0];
+
        
       //files received
       //load them in the component
@@ -149,6 +234,17 @@ showMessag(msg:string){
         if(data.id==this.FileUploadId)
           this.showMessag(data.msg);
       });
+
+      this.socket.on('bodyPart',(data)=>{
+
+          console.log("Body parts received..");;
+          console.log(data);
+
+          this.bodyParts=data;
+
+      });
+
+      this.socket.emit("bodyPart",{part:"head"});
 
 
 }
@@ -210,7 +306,7 @@ imageSelected(index:number){
 }
 
   saveBaseParamRange(slider,value) {
-    console.log('Value of slider ' + slider + ' changed to', value);
+    //console.log('Value of slider ' + slider + ' changed to', value);
 
   }
 
@@ -272,7 +368,7 @@ this.outputRes = {
         }
   request.open(
               "POST",
-              "http://54.254.224.168:8080/upload"  //replace with the target server which is handling uploads
+              "http://localhost:8080/upload"  //replace with the target server which is handling uploads
               //"http://130.211.167.206:2000/upload"
              // "http://192.168.1.114:3000/users/abc"
     ,true
@@ -281,6 +377,25 @@ this.outputRes = {
   request.send(form);
 
   }
+
+
+  bodyPartTypeSelected(part:string){
+
+      //fetch the requestd body part
+      console.log("fecthcing parts: "+part);
+
+
+      this.bodyPartImage=`assets/images/human/${part}.png`;
+            this.socket.emit("bodyPart",{part:part});
+
+  }
+    bodyPartSelected(index:number){
+        try{
+      this.selectedBodyPart=this.bodyParts.files[index]
+        }catch(ex){
+
+        }
+    }
 
    errorHandler(error: Response){
     console.error(error);
