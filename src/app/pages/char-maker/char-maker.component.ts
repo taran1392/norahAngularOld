@@ -101,7 +101,7 @@ export class CharMakerComponent implements OnInit {
 
 showMessag(msg:string){
   let d=$("#toasterDiv")[0];
-  console.log(d);
+  //console.log(d);
     d.innerHTML=msg;
     $("#toasterDiv")[0].style.display="block";
 
@@ -142,7 +142,9 @@ showMessag(msg:string){
     const inputjson = JSON.stringify(inputVal);
   const outputjson = JSON.stringify(outputVal);
   
- 
+ //send via socket
+
+ this.sendValues(inputVal,outputVal);
     var blobinput = new Blob([inputjson], {type: "application/json"});
   var bloboutput = new Blob([outputjson], {type: "application/json"});
   
@@ -171,7 +173,8 @@ showMessag(msg:string){
                 }
             }
         }
-  request.open(
+ 
+        /* request.open(
               "POST",
               "http://localhost:8080/upload"  //replace with the target server which is handling uploads
               //"http://130.211.167.206:2000/upload"
@@ -182,7 +185,7 @@ showMessag(msg:string){
   request.send(form);
 
       
-
+*/
 
   }
 
@@ -210,7 +213,7 @@ showMessag(msg:string){
 
         console.log("Socket Data Received: ");
         console.log(data);
-      if(data.id==this.FileUploadId){    
+      //if(data.id==this.FileUploadId){    
        this.showMessag("Files successfully processed ");
         if(this.processedFiles.length>0)
        this.changeHistory.push(this.processedFiles);
@@ -221,17 +224,24 @@ showMessag(msg:string){
       //files received
       //load them in the component
       
-      }
+      
     
       });
       
 
-      this.socket.on('error',(data)=>{
+      this.socket.on("info",(data)=>{
 
-
-        console.log("Socket Data Received: ");
+        console.log("info from server");
         console.log(data);
-        if(data.id==this.FileUploadId)
+
+        this.showMessag(data.msg);
+      });
+      this.socket.on('errorInfo',(data)=>{
+
+
+        console.log("Socket Error Data Received: ");
+        console.log(data);
+        //if(data.id==this.FileUploadId)
           this.showMessag(data.msg);
       });
 
@@ -333,6 +343,7 @@ this.outputRes = {
         proportions:0.0
 		}
   
+    this.sendValues(this.inputRes,this.outputRes);
 
   const inputjson = JSON.stringify(this.inputRes);
   const outputjson = JSON.stringify(this.outputRes);
@@ -366,17 +377,29 @@ this.outputRes = {
                 }
             }
         }
-  request.open(
+  /*request.open(
               "POST",
               "http://localhost:8080/upload"  //replace with the target server which is handling uploads
               //"http://130.211.167.206:2000/upload"
              // "http://192.168.1.114:3000/users/abc"
     ,true
             );
-    
-  request.send(form);
+    */
+  //request.send(form);
 
   }
+
+  sendValues(inputValues,outputValues){
+
+  this.socket.emit("upload",{inputValues:inputValues,outputValues:outputValues},(err)=>{
+
+
+
+    console.log("upload request sent");
+    console.log(err);
+  });
+  }
+
 
 
   bodyPartTypeSelected(part:string){
