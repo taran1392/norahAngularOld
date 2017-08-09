@@ -1,5 +1,5 @@
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,OnChanges,SimpleChange, SimpleChanges } from '@angular/core';
 import {NgForm, FormBuilder,ReactiveFormsModule,FormGroup} from '@angular/forms';
 import { Http,Headers} from '@angular/http';
 import {Observable,Subscription} from 'rxjs/Rx';
@@ -16,7 +16,7 @@ declare var $:any;
   styleUrls: ['./char-maker.component.css'],
   providers:[SocketService]
 })
-export class CharMakerComponent implements OnInit {
+export class CharMakerComponent implements OnInit,OnChanges {
   public hideFooter=false;
   public someMin = 1;
   public someLimit = 50;
@@ -314,6 +314,9 @@ imageSelected(index:number){
 
 
 }
+
+
+ngOnChange(changes:SimpleChanges){}
 
   saveBaseParamRange(slider,value) {
     //console.log('Value of slider ' + slider + ' changed to', value);
